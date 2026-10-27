@@ -1,0 +1,24 @@
+name: Auto Post to Socials
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'posts/**' # Triggers whenever you add or edit a file inside a /posts folder
+
+jobs:
+  send-to-social:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Send Post via API
+        run: |
+          # This command sends a request to your social API bridge using your stored secret
+          curl -X POST "https://app.ayrshare.com/api/post" \
+          -H "Authorization: Bearer ${{ secrets.SOCIAL_API_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{"post": "New update published on Social Growth HQ! Check out our latest automated agent insights.", "platforms": ["twitter", "linkedin"]}'
+          
